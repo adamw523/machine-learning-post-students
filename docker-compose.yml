@@ -1,0 +1,11 @@
+ipython:
+  build: jupyter/
+  ports:
+    - 7788:8888
+  volumes:
+    - ./projects:/home/jovyan/work
+    - .:/data
+  environment:
+    GRANT_SUDO: 'yes'
+
+
