@@ -289,7 +289,7 @@ class Environment(object):
         # Scales reward multiplicatively from [0, 1]
         fnc = self.t * 1.0 / (self.t + state['deadline']) if agent.primary_agent else 0.0
         gradient = 10
-        
+
         # No penalty given to an agent that has no enforced deadline
         penalty = 0
 
@@ -303,7 +303,7 @@ class Environment(object):
                 violation = 2 # Major violation
                 if inputs['left'] == 'forward' or inputs['right'] == 'forward': # Cross traffic
                     violation = 4 # Accident
-        
+
         # Agent wants to drive left:
         elif action == 'left':
             if light != 'green': # Running a red light

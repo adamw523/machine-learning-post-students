@@ -6,10 +6,10 @@ from simulator import Simulator
 
 class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
-        This is the object you will be modifying. """ 
+        This is the object you will be modifying. """
 
     def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
-        super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
+        super(LearningAgent, self).__init__(env)     # Set the agent in the evironment
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
 
@@ -32,8 +32,8 @@ class LearningAgent(Agent):
 
         # Select the destination as the new location to route to
         self.planner.route_to(destination)
-        
-        ########### 
+
+        ###########
         ## TO DO ##
         ###########
         # Update epsilon using a decay function of your choice
@@ -97,22 +97,29 @@ class LearningAgent(Agent):
         self.next_waypoint = self.planner.next_waypoint()
         action = None
 
-        ########### 
+        ###########
         ## TO DO ##
         ###########
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
- 
+
+        if self.learning:
+            pass
+        else:
+            self.valid_actions
+
+        action = random.choice(self.env.valid_actions)
+
         return action
 
 
     def learn(self, state, action, reward):
         """ The learn function is called after the agent completes an action and
-            receives an award. This function does not consider future rewards 
+            receives an award. This function does not consider future rewards
             when conducting learning. """
 
-        ########### 
+        ###########
         ## TO DO ##
         ###########
         # When learning, implement the value iteration update rule
@@ -122,7 +129,7 @@ class LearningAgent(Agent):
 
 
     def update(self):
-        """ The update function is called when a time step is completed in the 
+        """ The update function is called when a time step is completed in the
             environment for a given trial. This function will build the agent
             state, choose an action, receive a reward, and learn if enabled. """
 
@@ -133,10 +140,10 @@ class LearningAgent(Agent):
         self.learn(state, action, reward)   # Q-learn
 
         return
-        
+
 
 def run():
-    """ Driving function for running the simulation. 
+    """ Driving function for running the simulation.
         Press ESC to close the simulation, or [SPACE] to pause the simulation. """
 
     ##############
@@ -146,7 +153,7 @@ def run():
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
     env = Environment()
-    
+
     ##############
     # Create the driving agent
     # Flags:
@@ -154,12 +161,12 @@ def run():
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
     agent = env.create_agent(LearningAgent)
-    
+
     ##############
     # Follow the driving agent
     # Flags:
     #   enforce_deadline - set to True to enforce a deadline metric
-    env.set_primary_agent(agent)
+    env.set_primary_agent(agent, enforce_deadline=True)
 
     ##############
     # Create the simulation
@@ -168,14 +175,14 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env)
-    
+    sim = Simulator(env, update_delay=0.005, log_metrics=True, display=False)
+
     ##############
     # Run the simulator
     # Flags:
-    #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
+    #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run()
+    sim.run(n_test=10)
 
 
 if __name__ == '__main__':
